@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BI Hub</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BrSupply%20-%20S%C3%B3%20Br.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #ff782d;
+      --orange-dark: #e05f18;
+      --orange-light: #fff3ed;
+      --gray: #666666;
+      --gray-dark: #3a3a3a;
+      --gray-light: #f5f5f5;
+      --gray-mid: #e0e0e0;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --shadow-hover: 0 8px 32px rgba(255,120,45,0.18);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f2f2f2;
+      color: var(--gray-dark);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 3px solid var(--orange);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      gap: 24px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--gray-mid);
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--gray);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+      transition: stroke 0.2s;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 40px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-mid);
+      background: var(--gray-light);
+      padding: 0 16px 0 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--gray-dark);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input::placeholder {
+      color: #999;
+    }
+
+    .search-input:focus {
+      border-color: var(--orange);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(255,120,45,0.12);
+    }
+
+    .search-input:focus + .search-icon,
+    .search-wrap:has(.search-input:focus) .search-icon {
+      stroke: var(--orange);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-mid);
+      color: var(--gray);
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-clear.show { display: flex; }
+
+    .header-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--orange);
+      background: var(--orange-light);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--gray-dark) 0%, #1a1a1a 100%);
+      padding: 48px 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,120,45,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 30%;
+      bottom: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,120,45,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+
+    .hero-heading {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .hero-heading span {
+      color: var(--orange);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      max-width: 480px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 48px 64px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 28px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      border: 1px solid var(--gray-mid);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .section-header:hover {
+      background: #fafafa;
+    }
+
+    .section-header.open {
+      border-bottom-color: var(--orange);
+    }
+
+    .section-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--orange-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--orange);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-dark);
+      letter-spacing: -0.01em;
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .section-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .toggle-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--orange-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s, background 0.2s;
+    }
+
+    .toggle-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--orange);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.3s;
+    }
+
+    .section-header.open .toggle-icon svg {
+      transform: rotate(180deg);
+    }
+
+    .section-body {
+      display: none;
+      padding: 24px;
+      background: #fafafa;
+    }
+
+    .section-body.open {
+      display: block;
+    }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-mid);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--orange);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: var(--gray-light);
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,120,45,0);
+      transition: background 0.22s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card:hover .card-overlay {
+      background: rgba(255,120,45,0.12);
+    }
+
+    .card-overlay-icon {
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.22s, transform 0.22s;
+      background: var(--orange);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card:hover .card-overlay-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .card-overlay-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--gray-mid);
+    }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--orange);
+      line-height: 1.4;
+    }
+
+    .card-action {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.02em;
+      transition: color 0.18s;
+    }
+
+    .card:hover .card-action {
+      color: var(--orange);
+    }
+
+    .card-action svg {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--gray);
+    }
+
+    .empty-state.show { display: block; }
+
+    .empty-state svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--gray-mid);
+      fill: none;
+      stroke-width: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .empty-state-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    .empty-state-sub {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #aaa;
+      border-top: 1px solid var(--gray-mid);
+      background: var(--white);
+    }
+
+    footer strong { color: var(--orange); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      header { padding: 0 20px; gap: 14px; }
+      .header-title { display: none; }
+      .search-wrap { max-width: none; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 32px 20px 28px; }
+      .hero-heading { font-size: 24px; }
+      main { padding: 24px 16px 48px; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    }
+
+    @media (max-width: 560px) {
+      header { flex-wrap: wrap; height: auto; padding: 12px 16px; }
+      .search-wrap { order: 3; max-width: 100%; flex-basis: 100%; }
+      .header-badge { display: none; }
+    }
+
+
+    /* ── BADGE NOVO ── */
+    .badge-new {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--orange);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(255,120,45,0.35);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      animation: pulse-badge 2s infinite;
+    }
+
+    .badge-new::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0.85;
+      animation: dot-blink 2s infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { box-shadow: 0 2px 8px rgba(255,120,45,0.35); }
+      50%       { box-shadow: 0 2px 16px rgba(255,120,45,0.60); }
+    }
+
+    @keyframes dot-blink {
+      0%, 100% { opacity: 0.85; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, var(--gray-dark) 0%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #loginScreen::before {
+      content: '';
+      position: absolute;
+      right: -10%;
+      top: -15%;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(255,120,45,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #loginScreen::after {
+      content: '';
+      position: absolute;
+      left: -10%;
+      bottom: -15%;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(255,120,45,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .login-card {
+      position: relative;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      width: 100%;
+      max-width: 380px;
+      padding: 40px 36px 32px;
+      text-align: center;
+    }
+
+    .login-logo {
+      height: 40px;
+      width: auto;
+      margin: 0 auto 24px;
+      display: block;
+    }
+
+    .login-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-dark);
+      margin-bottom: 26px;
+    }
+
+    .login-field {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .login-select, .login-input {
+      width: 100%;
+      height: 44px;
+      border-radius: 10px;
+      border: 1.5px solid var(--gray-mid);
+      background: var(--gray-light);
+      padding: 0 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--gray-dark);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .login-select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+
+    .login-input {
+      letter-spacing: 0.3em;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .login-input::placeholder {
+      letter-spacing: normal;
+      font-weight: 400;
+    }
+
+    .login-select:focus, .login-input:focus {
+      border-color: var(--orange);
+      background-color: var(--white);
+      box-shadow: 0 0 0 3px rgba(255,120,45,0.12);
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 46px;
+      border: none;
+      border-radius: 10px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .login-btn:hover { background: var(--orange-dark); }
+    .login-btn:active { transform: scale(0.98); }
+
+    .login-error {
+      display: none;
+      font-size: 12.5px;
+      color: #d32f2f;
+      background: #fdecea;
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .login-error.show { display: block; }
+
+    .login-footer {
+      margin-top: 22px;
+      font-size: 11px;
+      color: #bbb;
+    }
+
+    #appContent { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <img class="login-logo" src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BrSupply.png" alt="BrSupply" />
+    <div class="login-eyebrow">Acesso Restrito</div>
+    <div class="login-title">Entrar no BI Hub</div>
+
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="login-field">
+        <label for="loginUser">Usuário</label>
+        <select id="loginUser" class="login-select" required>
+          <option value="" disabled selected>Selecione seu nome...</option>
+        </select>
+      </div>
+
+      <div class="login-field">
+        <label for="loginPass">Senha</label>
+        <input id="loginPass" class="login-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="• • •" required />
+      </div>
+
+      <button type="submit" class="login-btn">Acessar</button>
+
+      <div id="loginError" class="login-error">Senha incorreta. Verifique e tente novamente.</div>
+    </form>
+
+    <div class="login-footer">BrSupply · Suprimentos Corporativos</div>
+  </div>
+</div>
+
+<div id="appContent">
+
+<!-- HEADER -->
+<header>
+  <div class="header-logo">
+    <img class="logo-img" src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BrSupply.png" alt="BrSupply" />
+    <div class="header-divider"></div>
+    <span class="header-title">BI Hub</span>
+  </div>
+
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" class="search-input" type="text" placeholder="Pesquisar dashboard, BI ou área..." autocomplete="off" oninput="handleSearch(this.value)" />
+    <button id="searchClear" class="search-clear" onclick="clearSearch()" aria-label="Limpar busca">✕</button>
+  </div>
+
+  <span class="header-badge">Power BI</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">BrSupply · Suprimentos Corporativos</div>
+  <h1 class="hero-heading">BI <span>Hub</span></h1>
+  <p class="hero-sub">Acesse os dashboards Power BI organizados por área. Clique em qualquer painel para abrir o relatório completo.</p>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <div class="section" data-area-section="controladoria">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Controladoria</span>
+          <span class="section-count">6 relatórios</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMTc4NmE0NTUtYWJlOS00MGEzLTk2OTUtNDYyNzllNmRhZjE0IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="dashboard gerencial" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Dashboard%20Br%20Supply.png" alt="Dashboard Gerencial" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Dashboard Gerencial</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMTQ0MThmZDUtZjllOC00ZDM3LWJjMzYtNDZkZDllMGVkZTBkIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="painel de despesas" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Painel%20De%20Despesas.png" alt="Painel De Despesas" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Painel De Despesas</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiNGYxZjlkNTgtNmI1MC00ZjAzLWEzNTQtMDM1MjE1OWRjMzk0IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="painel de chamados" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Painel%20de%20Chamados.png" alt="Painel de Chamados" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Painel de Chamados</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYzcxOGIwZmMtNGUyMi00MGRjLWFkYWQtNGMyNThhNTZhYjhmIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="monitor de validação fiscal" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Monitor%20de%20Valida%C3%A7%C3%A3o%20Fiscal.png" alt="Monitor de Validação Fiscal" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Monitor de Validação Fiscal</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZGUxM2MyMzEtODU5ZC00ODRhLTg1ZWUtMDI0MWI5NDI1YmZjIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="painel de estoque auditoria" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Painel%20de%20Estoque%20Auditoria.png" alt="Painel de Estoque Auditoria" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Painel de Estoque Auditoria</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiODc0OTdlZGItNWFmMi00ZmNhLWIyNGEtNTY0NDc1MTYwMjM2IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="gestão de inadimplência" data-area="controladoria">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Gest%C3%A3o%20de%20Inadimpl%C3%AAncia.png" alt="Gestão de Inadimplência" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Gestão de Inadimplência</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" data-area-section="distribuição">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Distribuição</span>
+          <span class="section-count">5 relatórios</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYmZlMzIxODMtYjNiNi00MzdiLWIyZWUtNmI0YTY4OGRlZTAwIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="torre distribuição" data-area="distribuição">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Torre%20Distribui%C3%A7%C3%A3o.png" alt="Torre Distribuição" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Torre Distribuição</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYjZjZGM3MTctYjJmMS00NTVmLTgwNDAtMDA3YzQ2Njg5ZjAxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="gerenciamento de transferências" data-area="distribuição">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Gerenciamento%20de%20Transfer%C3%AAncias.png" alt="Gerenciamento de Transferências" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Gerenciamento de Transferências</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiNmZmNDI0MjctYTMyNC00ODg4LWFkMDUtYjFiNTk1ZTZlN2MwIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="monitoramento crossdocking" data-area="distribuição">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Monitoramento%20Crossdocking.png" alt="Monitoramento Crossdocking" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Monitoramento Crossdocking</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMTEzNDgyNWEtNmI3ZC00ZDYxLWI0MzUtNmUxZjk2YjFhNDcxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="controle de bipagem" data-added="2026-07-08" data-area="distribuição">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Controle%20de%20Bipagem.png" alt="Controle de Bipagem" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Controle de Bipagem</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZjllNjgwNmUtYzI2Zi00YjFkLWE0YWYtMjIwYTRkNzMwMWMzIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="custo de frete" data-added="2026-07-08" data-area="distribuição">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Custo%20Frete.png" alt="Custo de Frete" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Custo de Frete</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="section" data-area-section="intralogística">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Intralogística</span>
+          <span class="section-count">9 relatórios</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYmFlYWVkYmMtMDQ1MS00NjMzLThlMzMtOTFmODc1NzNjNDMxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="monitor de ruptura wms" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Monitor%20de%20Ruptura%20WMS.png" alt="Monitor de Ruptura WMS" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Monitor de Ruptura WMS</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZWFkMWQ0NDUtOGJlZC00ZDBlLWI5OWUtOGUxNTg5YjliZTY0IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="ocupação de estoque" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Ocupa%C3%A7%C3%A3o%20de%20Estoque.png" alt="Ocupação de Estoque" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Ocupação de Estoque</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiODA2MTE1YzktNDE2MS00OWY0LWFlZDctYmYyY2JjZjVhOWIyIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="monitor de endereços compartilhados" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Monitor%20Endere%C3%A7os%20Compartilhados.png" alt="Monitor de Endereços Compartilhados" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Monitor de Endereços Compartilhados</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZDBiYzliMzctYjAyMC00ZDdkLWE4YWMtZDg4MTg0NmE4ODcxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="painel de recebimento" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Painel%20de%20Recebimento.png" alt="Painel de Recebimento" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Painel de Recebimento</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiNzRhN2NmMWQtZWI0ZC00NTA5LWI0MGQtNmUwYWU2YTUzYjBlIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="pedido perfeito" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Pedido%20Perfeito.png" alt="Pedido Perfeito" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Pedido Perfeito</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiOTgxMzJkOGMtMjBhNy00OWI0LThlMTEtMzM3YjIyN2ZjMzI4IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="atraso de embarque" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Intralog%C3%ADstica_Atraso%20de%20Embarque.png" alt="Atraso de Embarque" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Atraso de Embarque</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiNWFhOGJjZTItNTBiOS00OTRiLWE1ODEtMGY0YjMwZTMxNGEzIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="chamados operação e distribuição" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Intralog%C3%ADstica_Chamados%20Opera%C3%A7%C3%A3o%20e%20Distribui%C3%A7%C3%A3o.png" alt="Chamados Operação e Distribuição" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Chamados Operação e Distribuição</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMWIxN2Q3OTctOTRmZS00NTQzLTk1NGUtOWI0YWI0ZDQ2NTIxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="produtividade de separação" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Intralog%C3%ADstica_Produtividade%20de%20Separa%C3%A7%C3%A3o.png" alt="Produtividade de Separação" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Produtividade de Separação</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYzQ3ZTI4ZjYtNDUyNy00YTE3LWIzNDktOTkwNzgxNmU1ZDlkIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="programação de pedidos" data-added="2026-07-08" data-area="intralogística">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Intralog%C3%ADstica_Programa%C3%A7%C3%A3o%20de%20Pedidos.png" alt="Programação de Pedidos" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Programação de Pedidos</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" data-area-section="planejamento e controle">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Planejamento e Controle</span>
+          <span class="section-count">3 relatórios</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYzdhNjk1YmEtMDdlOC00NzkwLTliODEtMjE0OGM2YjJjM2JiIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="esteira de pedidos - performance" data-area="planejamento e controle">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Esteira%20de%20Pedidos%20-%20Performance.png" alt="Esteira de Pedidos - Performance" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Esteira de Pedidos - Performance</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZDk0MTQxMzAtOWExMi00YWRkLTlkYTktMDM0NjA2M2Y2Yzg2IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="esteira de pedidos" data-area="planejamento e controle">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Esteira%20de%20Pedidos.png" alt="Esteira de Pedidos" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Esteira de Pedidos</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYmFlNWExMjMtOTgxZS00ZTllLWE1NzgtZjQ5ZWNiNjI1ZjM3IiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="monitoramento pré-embarque" data-area="planejamento e controle">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Monitoramento%20Pr%C3%A9-Embarque.png" alt="Monitoramento Pré-Embarque" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Monitoramento Pré-Embarque</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" data-area-section="comercial">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Comercial</span>
+          <span class="section-count">1 relatório</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiNjBhY2U3NWEtZDc5MS00ODcxLWJiYzAtMGViMTQ0MDU0YjQxIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="bonificações e descontos" data-added="2026-07-08" data-area="comercial">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Bonifica%C3%A7%C3%B5es%20e%20Descontos.png" alt="Bonificações e Descontos" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Bonificações e Descontos</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" data-area-section="recursos humanos">
+    <div class="section-header open" onclick="toggleSection(this)" role="button" aria-expanded="true">
+      <div class="section-header-left">
+        <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <span class="section-title">Recursos Humanos</span>
+          <span class="section-count">1 relatório</span>
+        </div>
+      </div>
+      <div class="section-toggle">
+        <span>Recolher</span>
+        <div class="toggle-icon"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+    </div>
+    <div class="section-body open">
+      <div class="card-grid">
+        <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZDJlNTQ0MjctNmJjMS00OTYzLWFiZGQtZWU1MTc3ZWJhNTZlIiwidCI6Ijk0YzE5MjZmLWZiYTAtNDZlMi1iMTk0LWQyZDQzNWU2OTEwNSJ9" target="_blank" rel="noopener" data-name="gestão de rh" data-added="2026-07-08" data-area="recursos humanos">
+          <div class="card-img-wrap">
+            <img src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BI_Gest%C3%A3o%20de%20RH.png" alt="Gestão de RH" loading="lazy" />
+            <div class="card-overlay"><div class="card-overlay-icon"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">Gestão de RH</div>
+            <div class="card-action">Abrir relatório <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <div class="empty-state-title">Nenhum resultado encontrado</div>
+    <div class="empty-state-sub">Tente pesquisar por outro nome de BI ou área</div>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2025 <strong>BrSupply</strong> · Suprimentos Corporativos · BI Hub
+</footer>
+
+</div>
+
+<script>
+
+  // ── BADGE NOVO ──────────────────────────────────────────
+  (function() {
+    const DAYS_NEW = 30;
+    const now = new Date();
+    document.querySelectorAll('.card[data-added]').forEach(card => {
+      const added = new Date(card.getAttribute('data-added'));
+      const diff = (now - added) / (1000 * 60 * 60 * 24);
+      if (diff <= DAYS_NEW) {
+        const wrap = card.querySelector('.card-img-wrap');
+        if (wrap) {
+          const badge = document.createElement('div');
+          badge.className = 'badge-new';
+          badge.textContent = 'Novo';
+          wrap.appendChild(badge);
+        }
+      }
+    });
+  })();
+
+  // ── LOGIN ──────────────────────────────────────────────
+  // Lista de usuários (ofuscada em base64 - apenas para evitar texto puro óbvio;
+  // não é segurança real, pois roda no navegador do usuário)
+  const USERS_B64 = "W3sibiI6ICJCcnVubyBTb2FyZXMiLCAicCI6ICI0NDAifSwgeyJuIjogIkNlc2FyIEZvbGxlIiwgInAiOiAiODMxIn0sIHsibiI6ICJEYWx0b24gU2NobWl0dCBKciIsICJwIjogIjQxNSJ9LCB7Im4iOiAiRGFuaWVsIExpc2JvYSIsICJwIjogIjI2NiJ9LCB7Im4iOiAiR3VpbGhlcm1lIFJvc3QiLCAicCI6ICI3MDAifSwgeyJuIjogIklnb3IgRnJhbmNvIiwgInAiOiAiOTAyIn0sIHsibiI6ICJNYXJjZWxvIFNwYW5ob2xpIiwgInAiOiAiNTAwIn0sIHsibiI6ICJSb2RyaWdvIEl2byIsICJwIjogIjMxMCJ9LCB7Im4iOiAiRmVybmFuZG8gQ2FydmFsaG8iLCAicCI6ICI4NTgifSwgeyJuIjogIkx1Y2FzIExhdWNrIiwgInAiOiAiNjE1In1d";
+
+  function loadUsers() {
+    try {
+      const json = decodeURIComponent(escape(atob(USERS_B64)));
+      return JSON.parse(json);
+    } catch (e) {
+      console.error('Erro ao carregar usuários', e);
+      return [];
+    }
+  }
+
+  const USERS = loadUsers();
+
+  function populateUserSelect() {
+    const select = document.getElementById('loginUser');
+    const sorted = [...USERS].sort((a, b) => a.n.localeCompare(b.n, 'pt-BR'));
+    sorted.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u.n;
+      opt.textContent = u.n;
+      select.appendChild(opt);
+    });
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const name = document.getElementById('loginUser').value;
+    const pass = document.getElementById('loginPass').value.trim();
+    const errorBox = document.getElementById('loginError');
+
+    const user = USERS.find(u => u.n === name);
+    if (user && user.p === pass) {
+      sessionStorage.setItem('bihub_auth', name);
+      showApp();
+    } else {
+      errorBox.classList.add('show');
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginPass').focus();
+    }
+    return false;
+  }
+
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+  }
+
+  function checkSession() {
+    const saved = sessionStorage.getItem('bihub_auth');
+    if (saved && USERS.some(u => u.n === saved)) {
+      showApp();
+    }
+  }
+
+  populateUserSelect();
+  checkSession();
+
+  // ── APP ──────────────────────────────────────────────
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    const toggleLabel = header.querySelector('.section-toggle span');
+    const isOpen = header.classList.contains('open');
+
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+    header.setAttribute('aria-expanded', String(!isOpen));
+    toggleLabel.textContent = isOpen ? 'Expandir' : 'Recolher';
+  }
+
+  function handleSearch(value) {
+    const term = value.trim().toLowerCase();
+    const clearBtn = document.getElementById('searchClear');
+    clearBtn.classList.toggle('show', term.length > 0);
+
+    const sections = document.querySelectorAll('.section');
+    let totalVisible = 0;
+
+    sections.forEach(section => {
+      const cards = section.querySelectorAll('.card');
+      const header = section.querySelector('.section-header');
+      const body = section.querySelector('.section-body');
+      let visibleInSection = 0;
+
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name') || '';
+        const area = card.getAttribute('data-area') || '';
+        const match = term === '' || name.includes(term) || area.includes(term);
+        card.style.display = match ? '' : 'none';
+        if (match) visibleInSection++;
+      });
+
+      section.style.display = visibleInSection > 0 ? '' : 'none';
+      totalVisible += visibleInSection;
+
+      if (term !== '' && visibleInSection > 0) {
+        header.classList.add('open');
+        body.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+        const label = header.querySelector('.section-toggle span');
+        if (label) label.textContent = 'Recolher';
+      }
+    });
+
+    document.getElementById('emptyState').classList.toggle('show', totalVisible === 0 && term !== '');
+  }
+
+  function clearSearch() {
+    const input = document.getElementById('searchInput');
+    input.value = '';
+    handleSearch('');
+    input.focus();
+  }
+</script>
+
+</body>
+</html>
