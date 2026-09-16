@@ -245,14 +245,14 @@
   const URL_BIS        = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRJWm-Cv2WCiHhExuvlwItQHV3P0t7KPDbNKd4-5Y7hxuvgX6DvgeIRexEyqfi1gghMDq-mo60-E4dk/pub?gid=1823329965&single=true&output=csv";
   const URL_PERMISSOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRJWm-Cv2WCiHhExuvlwItQHV3P0t7KPDbNKd4-5Y7hxuvgX6DvgeIRexEyqfi1gghMDq-mo60-E4dk/pub?gid=0&single=true&output=csv";
 
-  const ADMIN_USER = "Guilherme Rost";
-  const DAYS_NEW   = 30;
-  const NEW_DATE   = "2026-09-15"; // data base dos BIs marcados como novos
+  const DAYS_NEW = 30;
+  const NEW_DATE = "2026-09-15"; // data base dos BIs marcados como novos
 
   // Estado global
   let USUARIOS   = {}; // { "Nome": "senha" }
   let BIS        = []; // [{ nome, secao, linkBI, linkImagem }]
-  let PERMISSOES = {}; // { "Nome": Set(["bi1","bi2",...]) }
+  let PERMISSOES = {}; // { "Nome": Set(["bi1","bi2",...]) } — "*" = acesso total
+  let ADMINS     = new Set(); // usuários com "*" nas permissões
 
   // ── PARSE CSV ───────────────────────────────────────────
   function parseCSV(text) {
@@ -297,13 +297,17 @@
         linkImagem: (r[3] || '').trim()
       }));
 
-    // Permissões: Login, BI
+    // Permissões: Login, BI  (BI = "*" libera tudo para aquele usuário)
     parseCSV(txtP).forEach(r => {
       if (!r[0] || !r[1]) return;
       const user = r[0].trim();
-      const bi   = r[1].trim().toLowerCase();
-      if (!PERMISSOES[user]) PERMISSOES[user] = new Set();
-      PERMISSOES[user].add(bi);
+      const bi   = r[1].trim();
+      if (bi === '*') {
+        ADMINS.add(user);
+      } else {
+        if (!PERMISSOES[user]) PERMISSOES[user] = new Set();
+        PERMISSOES[user].add(bi.toLowerCase());
+      }
     });
   }
 
@@ -341,7 +345,7 @@
 
   // ── RENDER BIs ──────────────────────────────────────────
   function renderBIs(userName) {
-    const isAdmin  = userName === ADMIN_USER;
+    const isAdmin  = ADMINS.has(userName);
     const allowed  = isAdmin ? null : (PERMISSOES[userName] || new Set());
     const main     = document.getElementById('mainContent');
     const emptyEl  = document.getElementById('emptyState');
