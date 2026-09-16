@@ -193,9 +193,9 @@
     <form id="loginForm" onsubmit="return handleLogin(event)">
       <div class="login-field">
         <label for="loginUser">Usuário</label>
-        <input id="loginUser" class="login-select" list="userList"
-               placeholder="Digite ou selecione seu nome..." autocomplete="off" required />
-        <datalist id="userList"></datalist>
+        <select id="loginUser" class="login-select" required>
+          <option value="" disabled selected>Selecione seu nome...</option>
+        </select>
       </div>
       <div class="login-field">
         <label for="loginPass">Senha</label>
@@ -274,22 +274,24 @@
   }
 
   // ── LOAD SHEETS ─────────────────────────────────────────
-  async function loadSheets() {
-    const [resU, resB, resP] = await Promise.all([
-      fetch(URL_USUARIOS),
+
+  // Carrega só usuários — rápido, chamado no init para popular o dropdown
+  async function loadUsuarios() {
+    const res = await fetch(URL_USUARIOS);
+    const txt = await res.text();
+    parseCSV(txt).forEach(r => {
+      if (r[0] && r[1]) USUARIOS[r[0].trim()] = r[1].trim();
+    });
+  }
+
+  // Carrega BIs e Permissões — chamado após clique em Acessar
+  async function loadRest() {
+    const [resB, resP] = await Promise.all([
       fetch(URL_BIS),
       fetch(URL_PERMISSOES)
     ]);
-    const [txtU, txtB, txtP] = await Promise.all([
-      resU.text(), resB.text(), resP.text()
-    ]);
+    const [txtB, txtP] = await Promise.all([resB.text(), resP.text()]);
 
-    // Usuários: Login, Senha
-    parseCSV(txtU).forEach(r => {
-      if (r[0] && r[1]) USUARIOS[r[0].trim()] = r[1].trim();
-    });
-
-    // BIs: Nome, Secao, LinkBI, LinkImagem
     BIS = parseCSV(txtB)
       .filter(r => r[0] && r[1] && r[2])
       .map(r => ({
@@ -299,7 +301,6 @@
         linkImagem: (r[3] || '').trim()
       }));
 
-    // Permissões: Login, BI  (BI = "*" libera tudo para aquele usuário)
     parseCSV(txtP).forEach(r => {
       if (!r[0] || !r[1]) return;
       const user = r[0].trim();
@@ -313,15 +314,22 @@
     });
   }
 
+  // Mantém loadSheets para compatibilidade com o fluxo de sessão salva
+  async function loadSheets() {
+    await loadUsuarios();
+    await loadRest();
+  }
+
   // ── LOGIN ───────────────────────────────────────────────
   function populateSelect() {
-    const dl = document.getElementById('userList');
-    if (!dl) return;
-    dl.innerHTML = '';
+    const sel = document.getElementById('loginUser');
+    if (!sel) return;
+    // Mantém o placeholder e adiciona os nomes
+    sel.innerHTML = '<option value="" disabled selected>Selecione seu nome...</option>';
     Object.keys(USUARIOS).sort((a,b) => a.localeCompare(b,'pt-BR')).forEach(name => {
       const opt = document.createElement('option');
-      opt.value = name;
-      dl.appendChild(opt);
+      opt.value = name; opt.textContent = name;
+      sel.appendChild(opt);
     });
   }
 
@@ -332,28 +340,23 @@
     const err  = document.getElementById('loginError');
     err.classList.remove('show');
 
-    // Mostra loading e busca planilha ao clicar em Acessar
-    document.getElementById('loadingScreen').style.display = 'flex';
-    document.getElementById('loginScreen').style.display   = 'none';
-
-    try {
-      await loadSheets();
-    } catch(ex) {
-      console.error('Erro ao carregar planilha:', ex);
-    }
-
-    document.getElementById('loadingScreen').style.display = 'none';
-
-    if (USUARIOS[name] && USUARIOS[name] === pass) {
-      sessionStorage.setItem('bihub_auth', name);
-      showApp(name);
-    } else {
-      // Volta para login com mensagem de erro
-      document.getElementById('loginScreen').style.display = 'flex';
+    // Valida credenciais (USUARIOS já está carregado desde o init)
+    if (!USUARIOS[name] || USUARIOS[name] !== pass) {
       err.classList.add('show');
       document.getElementById('loginPass').value = '';
       document.getElementById('loginPass').focus();
+      return false;
     }
+
+    // Credenciais ok — carrega BIs e Permissões enquanto mostra loading
+    document.getElementById('loadingScreen').style.display = 'flex';
+    document.getElementById('loginScreen').style.display   = 'none';
+
+    try { await loadRest(); } catch(ex) { console.error(ex); }
+
+    document.getElementById('loadingScreen').style.display = 'none';
+    sessionStorage.setItem('bihub_auth', name);
+    showApp(name);
     return false;
   }
 
@@ -509,22 +512,20 @@
 
   // ── INIT ────────────────────────────────────────────────
   (async () => {
+    // Carrega só Usuarios (1 fetch leve) para popular o dropdown
+    try { await loadUsuarios(); } catch(e) { console.error(e); }
+    populateSelect();
+
     const saved = sessionStorage.getItem('bihub_auth');
-    if (saved) {
-      // Tem sessão — carrega planilha e abre app direto
-      document.getElementById('loginScreen').style.display  = 'none';
+    if (saved && USUARIOS[saved]) {
+      // Sessão válida — carrega o resto e abre o app
+      document.getElementById('loginScreen').style.display   = 'none';
       document.getElementById('loadingScreen').style.display = 'flex';
-      try { await loadSheets(); } catch(e) { console.error(e); }
+      try { await loadRest(); } catch(e) { console.error(e); }
       document.getElementById('loadingScreen').style.display = 'none';
-      if (USUARIOS[saved]) {
-        showApp(saved);
-      } else {
-        // Sessão inválida (usuário removido da planilha) — volta ao login
-        sessionStorage.removeItem('bihub_auth');
-        document.getElementById('loginScreen').style.display = 'flex';
-      }
+      showApp(saved);
     }
-    // Sem sessão: login já está visível, não faz nada
+    // Login já está visível — aguarda interação do usuário
   })();
 </script>
 
