@@ -36,7 +36,7 @@
     #loginScreen {
       position:fixed; inset:0; z-index:1000;
       background:linear-gradient(135deg,var(--gray-dark) 0%,#1a1a1a 100%);
-      display:none; align-items:center; justify-content:center; padding:24px;
+      display:flex; align-items:center; justify-content:center; padding:24px;
     }
     #loginScreen::before {
       content:''; position:absolute; right:-60px; top:-60px; width:300px; height:300px;
@@ -63,6 +63,8 @@
       background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
       background-repeat:no-repeat; background-position:right 14px center; background-size:16px; padding-right:38px; cursor:pointer;
     }
+    .login-select-wrap { position:relative; }
+    .login-select-wrap datalist { display:none; }
     .login-input { letter-spacing:0.3em; font-weight:600; text-align:center; }
     .login-input::placeholder { letter-spacing:normal; font-weight:400; }
     .login-select:focus, .login-input:focus { border-color:var(--orange); background-color:var(--white); box-shadow:0 0 0 3px rgba(255,120,45,0.12); }
@@ -176,7 +178,7 @@
 <body>
 
 <!-- LOADING -->
-<div id="loadingScreen">
+<div id="loadingScreen" style="display:none;">
   <img class="loading-logo" src="https://raw.githubusercontent.com/RostGuilherme/BrSupply-Imagens/main/BrSupply.png" alt="BrSupply" />
   <div class="loading-spinner"></div>
   <div class="loading-text">Carregando...</div>
@@ -191,9 +193,9 @@
     <form id="loginForm" onsubmit="return handleLogin(event)">
       <div class="login-field">
         <label for="loginUser">Usuário</label>
-        <select id="loginUser" class="login-select" required>
-          <option value="" disabled selected>Selecione seu nome...</option>
-        </select>
+        <input id="loginUser" class="login-select" list="userList"
+               placeholder="Digite ou selecione seu nome..." autocomplete="off" required />
+        <datalist id="userList"></datalist>
       </div>
       <div class="login-field">
         <label for="loginPass">Senha</label>
@@ -313,23 +315,41 @@
 
   // ── LOGIN ───────────────────────────────────────────────
   function populateSelect() {
-    const sel = document.getElementById('loginUser');
+    const dl = document.getElementById('userList');
+    if (!dl) return;
+    dl.innerHTML = '';
     Object.keys(USUARIOS).sort((a,b) => a.localeCompare(b,'pt-BR')).forEach(name => {
       const opt = document.createElement('option');
-      opt.value = name; opt.textContent = name;
-      sel.appendChild(opt);
+      opt.value = name;
+      dl.appendChild(opt);
     });
   }
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     const name = document.getElementById('loginUser').value;
     const pass = document.getElementById('loginPass').value.trim();
     const err  = document.getElementById('loginError');
+    err.classList.remove('show');
+
+    // Mostra loading e busca planilha ao clicar em Acessar
+    document.getElementById('loadingScreen').style.display = 'flex';
+    document.getElementById('loginScreen').style.display   = 'none';
+
+    try {
+      await loadSheets();
+    } catch(ex) {
+      console.error('Erro ao carregar planilha:', ex);
+    }
+
+    document.getElementById('loadingScreen').style.display = 'none';
+
     if (USUARIOS[name] && USUARIOS[name] === pass) {
       sessionStorage.setItem('bihub_auth', name);
       showApp(name);
     } else {
+      // Volta para login com mensagem de erro
+      document.getElementById('loginScreen').style.display = 'flex';
       err.classList.add('show');
       document.getElementById('loginPass').value = '';
       document.getElementById('loginPass').focus();
@@ -489,21 +509,22 @@
 
   // ── INIT ────────────────────────────────────────────────
   (async () => {
-    try {
-      await loadSheets();
-    } catch(e) {
-      console.error('Erro ao carregar planilha:', e);
-    }
-
-    document.getElementById('loadingScreen').style.display = 'none';
-
     const saved = sessionStorage.getItem('bihub_auth');
-    if (saved && USUARIOS[saved]) {
-      showApp(saved);
-    } else {
-      populateSelect();
-      document.getElementById('loginScreen').style.display = 'flex';
+    if (saved) {
+      // Tem sessão — carrega planilha e abre app direto
+      document.getElementById('loginScreen').style.display  = 'none';
+      document.getElementById('loadingScreen').style.display = 'flex';
+      try { await loadSheets(); } catch(e) { console.error(e); }
+      document.getElementById('loadingScreen').style.display = 'none';
+      if (USUARIOS[saved]) {
+        showApp(saved);
+      } else {
+        // Sessão inválida (usuário removido da planilha) — volta ao login
+        sessionStorage.removeItem('bihub_auth');
+        document.getElementById('loginScreen').style.display = 'flex';
+      }
     }
+    // Sem sessão: login já está visível, não faz nada
   })();
 </script>
 
